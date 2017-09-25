@@ -83,6 +83,10 @@ var createCharacterSheet = function(data) {
     spells.appendChild(createSpell(data.spells[i]));
   }
 
+  var image = document.createElement("img");
+  image.setAttribute("id", "image");
+  image.src = data.image_src;
+
 
   sheet.appendChild(name);
   sheet.appendChild(attributes);
@@ -94,6 +98,7 @@ var createCharacterSheet = function(data) {
   sheet.appendChild(cha);
   sheet.appendChild(level);
   sheet.appendChild(spells);
+  sheet.appendChild(image);
 
   return sheet;
 }

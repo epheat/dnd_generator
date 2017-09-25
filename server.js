@@ -1,5 +1,6 @@
 var express = require('express')
 var dotenv = require('dotenv').config()
+var axios = require('axios')
 
 // Create an app using Express framework
 var app = express()
@@ -22,6 +23,8 @@ function Character(name) {
   this.intelligence = randomInt(10)+8;
   this.wisdom = randomInt(10)+8;
   this.charisma = randomInt(10)+8;
+
+  this.image_src = "";
 
 }
 
@@ -77,8 +80,18 @@ app.get("/charSheet.js", function(request, response) {
 app.get("/new-player/:name", function(request, response) {
   var player = new Character(request.params.name);
 
-  response.json(player);
+  var num_results = 10;
+  var query_url = "https://api.giphy.com/v1/gifs/search?api_key="+process.env.GIPHY_KEY + "&q=" + player.class + "&limit=" + num_results + "&offset=0&rating=G&lang=en";
 
+  axios.get(query_url)
+  .then(function (api_response) {
+    var randomSelection = randomInt(num_results)
+    player.image_src = api_response.data.data[randomSelection].images.fixed_width_small.url;  // have to do something with my the naming conventions :)
+    response.json(player);
+  })
+  .catch(function (error) {
+    console.log(error)
+  })
 })
 
 function randomInt(max) {
