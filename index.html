@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<head>
+  <title>D&D Character Generator</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/style.css">
+
+  <!-- axios -->
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+  <!-- fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Adamina|Berkshire+Swash&effect=outline|Cantata+One|Muli" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Encode+Sans+Expanded&effect=3d" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Encode+Sans+Expanded:bold" rel="stylesheet">
+
+  <!-- createCharacterSheet function -->
+  <script src="/charSheet.js"></script>
+</head>
+<body>
+  <div id="form">
+    <h1>Random D&D Character Generator</h1>
+    <p>Give your character a name, and then click the submit button:</p>
+    <input id="player-name"></input>
+    <button onclick="submit()">submit</button>
+  </div>
+  <div id="character-sheet-container">
+
+  </div>
+
+  <script>
+    var submit = function() {
+      var player_name = document.getElementById('player-name').value;
+      // window.location = "/new-player/" + player_name;
+      axios.get("/new-player/" + player_name)
+      .then(function(response) {
+        // console.log(response);
+        var character_sheet_container = document.getElementById("character-sheet-container");
+        var character_sheet = createCharacterSheet(response.data);
+        character_sheet_container.appendChild(character_sheet);
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
+    }
+  </script>
+</body>
